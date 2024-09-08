@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        body {
+        background-image: url(bg-image.jpeg);
+        background-position: center;  /* Center the image */
+    background-size: cover;       /* Ensures the image covers the entire page */
+    background-repeat: no-repeat; /* Prevents the image from repeating */
+    background-attachment: fixed;
+            font-family: Arial, sans-serif;
+            color: #fff;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin:0 auto;
+        }
+
+        .header {
+    text-align: center;
+    position: relative;
+    z-index: 100; /* Make sure the header is on top */
+    padding-top: 50px; /* Add extra padding at the top */
+    color: white; /* Ensure the text is visible */
+}
+
+h1 {
+    margin-bottom: 20px;
+    z-index: 100; /* Ensure the heading appears above other elements */
+    position: relative;
+}
+        .center-circle {
+        width: 120px;
+        height: 120px;
+        border-radius: 50%;
+        background: linear-gradient(145deg, #f4d03f, #f39c12); /* Gold gradient for a premium look */
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        cursor: pointer;
+        border: 3px solid #8b4513; /* Dark brown border for contrast */
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.6), inset 0 0 5px rgba(255, 255, 255, 0.4);
+    }
+
+    /* The spinning triangle as a pointer */
+    .triangle {
+        width: 0;
+        height: 0;
+        border-top: 15px solid transparent;
+        border-bottom: 15px solid transparent;
+        border-right: 40px solid #f4d03f; /* Matching the center circle */
+        position: absolute;
+        top: 50%;
+        right: -240%;
+        transform: translateY(-50%);
+        box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+    }
+
+    /* Wheel Container */
+    .wheel {
+        display: flex;
+        justify-content: center;
+        position: relative;
+        margin-bottom: 20px;
+        background: radial-gradient(circle, #fff3e0, #e5a54b); /* Subtle radial background */
+        padding: 20px;
+        border-radius: 50%;
+        box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
+    }
+
+    /* Score Section Constitution-centric */
+    .score {
+        text-align: center;
+        margin-top: 20px;
+        font-family: 'Georgia', serif;
+        background-color: #fef5e7;
+        padding: 10px 20px;
+        border: 2px solid #8b4513;
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    }
+
+    .score span {
+        font-size: 24px;
+        color: #f39c12;
+        font-weight: bold;
+    }
+
+    /* Updated body background for a thematic look */
+    body {
+        background-color: #2c3e50;
+        font-family: Arial, sans-serif;
+        color: #fff;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        height: 100vh;
+    }
+        /* Centered Modal with Constitution Theme */
+        #questionModal {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: #fef5e7; /* Parchment-like background */
+            padding: 20px;
+            color: #333;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            width: 80%; /* Responsive width */
+            max-width: 500px;
+            border: 3px solid #8b4513; /* Classic, official look */
+            font-family: 'Times New Roman', serif; /* Formal font */
+        }
+
+        #questionModal h2 {
+            margin: 0 0 10px;
+            font-size: 24px;
+            color: #8b4513;
+            border-bottom: 2px solid #8b4513;
+            padding-bottom: 10px;
+        }
+
+        #questionModal p {
+            font-size: 18px;
+            margin-bottom: 15px;
+        }
+
+        #questionModal input {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 2px solid #8b4513;
+            border-radius: 5px;
+            font-size: 16px;
+            box-sizing: border-box;
+        }
+
+        #questionModal button {
+            padding: 10px 20px;
+            background-color: #8b4513;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        #questionModal button:hover {
+            background-color: #a0522d;
+        }
+
+        .score {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        /* Overlay for Modal */
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            z-index: 999;
+            display: none;
+        }
+
+        /* score */
+        .score ,h1 {
+        text-align: center;
+        margin-top: 20px;
+        padding: 10px;
+        background-color: #fef5e7; /* Parchment background */
+        border: 3px solid #8b4513; /* Border resembling official document styles */
+        border-radius: 10px;
+        width: 200px;
+        margin: 20px auto;
+        color: #333;
+        font-family: 'Times New Roman', serif; /* Formal font */
+        font-size: 18px;
+        box-shadow: 0 0 15px rgba(0, 0, 0, 0.4);
+    }
+
+    #winner {
+        font-family: 'Georgia', serif;
+        font-size: 22px;
+        color: #8b4513; /* Official looking dark brown */
+        background-color: #fef5e7; /* Parchment background */
+        padding: 10px 20px;
+        border: 2px solid #8b4513; /* Elegant dark border */
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+        margin-top: 15px;
+        display: inline-block;
+    }
+
+    .score p {
+        margin: 0;
+    }
+
+    .score span {
+        font-weight: bold;
+        color: #8b4513; /* Highlight score */
+    }
+
+        /* Success and Error Alerts */
+        .alert {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: #fef5e7;
+            color: #333;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+            border: 2px solid #8b4513;
+            text-align: center;
+            font-family: 'Times New Roman', serif;
+            font-size: 18px;
+            z-index: 1001;
+        }
+
+        .alert button {
+            margin-top: 10px;
+            padding: 5px 15px;
+            background-color: #8b4513;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+        }
+
+        .alert button:hover {
+            background-color: #a0522d;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="header">
+        <h1>Constitution Wheel</h1>
+        <p id="winner">Spin to learn about the Constitution!</p>
+    </div>
+    <div class="wheel">
+        <canvas id="canvas" width="500" height="500"></canvas>
+        <div class="center-circle" onclick="spin()">
+            <div class="triangle"></div>
+        </div>
+    </div>
+
+    <div class="score">
+        <p>Score: <span id="score">0</span></p>
+    </div>
+
+    <div class="overlay" id="overlay"></div>
+
+    <div id="questionModal">
+        <h2>What is this article about?</h2>
+        <p id="question"></p>
+        <input type="text" id="userAnswer" placeholder="Type your answer here" />
+        <button onclick="submitAnswer()">Submit</button>
+    </div>
+
+    <div class="alert" id="alertBox">
+        <p id="alertMessage"></p>
+        <button onclick="closeAlert()">OK</button>
+    </div>
+
+    <script>
+        function randomColor() {
+            const colors = [
+            { r: 255, g: 87, b: 34 },  // Deep Orange
+            { r: 76, g: 175, b: 80 },  // Green
+            { r: 33, g: 150, b: 243 }, // Blue
+            { r: 255, g: 235, b: 59 }, // Yellow
+            { r: 156, g: 39, b: 176 }, // Purple
+            { r: 244, g: 67, b: 54 },  // Red
+            { r: 3, g: 169, b: 244 },  // Light Blue
+            { r: 255, g: 152, b: 0 },  // Amber
+            ];
+            return colors[Math.floor(Math.random() * colors.length)];
+        }
+
+        function toRad(deg) {
+            return deg * (Math.PI / 180.0);
+        }
+
+        function randomRange(min, max) {
+            return Math.floor(Math.random() * (max - min + 1)) + min;
+        }
+
+        function easeOutSine(x) {
+            return Math.sin((x * Math.PI) / 2);
+        }
+
+        function getPercent(input, min, max) {
+            return (((input - min) * 100) / (max - min)) / 100;
+        }
+
+        const canvas = document.getElementById("canvas");
+        const ctx = canvas.getContext("2d");
+        const width = document.getElementById("canvas").width;
+        const height = document.getElementById("canvas").height;
+
+        const centerX = width / 2;
+        const centerY = height / 2;
+        const radius = width / 2;
+
+        let items = [
+            "Article 14: Right to Equality",
+            "Article 19: Freedom of Speech",
+            "Article 21: Right to Life",
+            "Article 32: Right to Constitutional Remedies",
+            "Article 44: Uniform Civil Code",
+            "Article 51A: Fundamental Duties",
+            "Article 368: Amendment of Constitution"
+        ];
+
+        let currentDeg = 0;
+        let step = 360 / items.length;
+        let colors = [];
+        let itemDegs = {};
+        let score = 0;
+
+        for (let i = 0; i < items.length + 1; i++) {
+            colors.push(randomColor());
+        }
+
+        function draw() {
+            ctx.clearRect(0, 0, width, height);
+
+            ctx.beginPath();
+            ctx.arc(centerX, centerY, radius, toRad(0), toRad(360));
+            ctx.fillStyle = `rgb(${33},${33},${33})`;
+            ctx.lineTo(centerX, centerY);
+            ctx.fill();
+
+            let startDeg = currentDeg;
+            for (let i = 0; i < items.length; i++, startDeg += step) {
+                let endDeg = startDeg + step;
+
+                const color = colors[i];
+                let colorStyle = `rgb(${color.r},${color.g},${color.b})`;
+
+                ctx.beginPath();
+                ctx.arc(centerX, centerY, radius - 2, toRad(startDeg), toRad(endDeg));
+                ctx.fillStyle = colorStyle;
+                ctx.lineTo(centerX, centerY);
+                ctx.fill();
+
+                ctx.save();
+                ctx.translate(centerX, centerY);
+                ctx.rotate(toRad((startDeg + endDeg) / 2));
+                ctx.textAlign = "center";
+                ctx.fillStyle = color.r + color.g + color.b > 400 ? "#000" : "#fff";
+                ctx.font = 'bold 18px Arial';
+                ctx.fillText(items[i].split(':')[0], 150, 10);
+                ctx.restore();
+
+                itemDegs[items[i]] = {
+                    "startDeg": startDeg,
+                    "endDeg": endDeg
+                };
+
+                if (startDeg % 360 < 360 && startDeg % 360 > 270 && endDeg % 360 > 0 && endDeg % 360 < 90) {
+                    document.getElementById("winner").innerHTML = items[i].split(':')[0];
+                }
+            }
+        }
+
+        draw();
+
+        let speed = 0;
+        let maxRotation = randomRange(360 * 3, 360 * 6);
+        let pause = false;
+
+        function animate() {
+            if (pause) {
+                return;
+            }
+            speed = easeOutSine(getPercent(currentDeg, maxRotation, 0)) * 20;
+            if (speed < 0.01) {
+                speed = 0;
+                pause = true;
+                showQuestionModal(document.getElementById("winner").innerHTML);
+            }
+            currentDeg += speed;
+            draw();
+            window.requestAnimationFrame(animate);
+        }
+
+        function spin() {
+            if (speed != 0) {
+                return;
+            }
+
+            maxRotation = 0;
+            currentDeg = 0;
+            draw();
+
+            maxRotation = (360 * 6) - itemDegs[items[Math.floor(Math.random() * items.length)]].endDeg + 10;
+            itemDegs = {};
+            pause = false;
+            window.requestAnimationFrame(animate);
+        }
+
+        function showQuestionModal(article) {
+            const questionText = items.find(item => item.startsWith(article)).split(': ')[0];
+            document.getElementById("question").textContent = `What does ${questionText} relate to?`;
+            document.getElementById("overlay").style.display = 'block';
+            document.getElementById("questionModal").style.display = 'block';
+        }
+
+        function submitAnswer() {
+            const userAnswer = document.getElementById("userAnswer").value.trim().toLowerCase();
+            const article = document.getElementById("winner").textContent;
+            const correctAnswer = items.find(item => item.startsWith(article)).split(': ')[1].trim().toLowerCase();
+
+            if (userAnswer === correctAnswer) {
+                showAlert("Correct! You gain a point.");
+                score++;
+            } else {
+                showAlert(`Incorrect. The correct answer is: ${correctAnswer}`);
+                score--;
+            }
+
+            document.getElementById("score").textContent = score;
+            closeModal();
+        }
+
+        function showAlert(message) {
+            document.getElementById("alertMessage").textContent = message;
+            document.getElementById("alertBox").style.display = 'block';
+        }
+
+        function closeAlert() {
+            document.getElementById("alertBox").style.display = 'none';
+        }
+
+        function closeModal() {
+            document.getElementById("overlay").style.display = 'none';
+            document.getElementById("questionModal").style.display = 'none';
+            document.getElementById("userAnswer").value = '';
+        }
+    </script>
+</body>
+</html>
